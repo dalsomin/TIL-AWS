@@ -2,8 +2,7 @@ AWS 자격증 자료(sloution architect - associate)
 
 기출문제 덤프
 http://koreadumps.com/AutoDelivery.aspx?sn=KD2002171317489198356&act=tmp
-메일주소: bdlabdump@gmail.com
-패스워드: 20200217
+
 
 이론정리 깃허브:
 https://github.com/serithemage/AWSCertifiedSolutionsArchitectUnofficialStudyGuide
