@@ -1,0 +1,574 @@
+#Elastic Load Balancing FAQ
+
+---
+
+## Application Load Balancer
+
+**Q: Application Load Balancer가 지원하는 운영 체제는 무엇입니까?**
+
+A: Application Load Balancer는 Amazon EC2 서비스가 현재 지원하는 모든 운영 체제에서 대상을 지원합니다.
+
+**Q: Application Load Balancer가 지원하는 프로토콜은 무엇입니까?**
+
+A: Application Load Balancer는 HTTP 및 HTTPS(보안 HTTP) 프로토콜을 사용하는 애플리케이션의 로드 밸런싱을 지원합니다.
+
+**Q: Application Load Balancer에서 HTTP/2가 지원됩니까?**
+
+A: 예 Application Load Balancer에서 HTTP/2는 기본적으로 지원됩니다. HTTP/2를 지원하는 클라이언트는 TLS를 통해 Application Load Balancer와 연결할 수 있습니다.
+
+**Q: 어떤 TCP 포트를 사용하여 로드 밸런싱할 수 있습니까?**
+
+A: 1~65535의 TCP 포트에 대해 로드 밸런싱을 수행할 수 있습니다.
+
+**Q: Application Load Balancer에서 웹 소켓이 지원됩니까?**
+
+A: 예 Application Load Balancer에서는 웹 소켓 및 보안 웹 소켓 지원이 기본적으로 제공되며 사용할 준비가 되어 있습니다.
+
+**Q: Application Load Balancer에서 요청 추적 기능을 지원합니까?**
+
+A: 예 Application Load Balancer에서는 요청 추적 기능이 기본적으로 활성화되어 있습니다.
+
+**Q: Classic Load Balancer는 Application Load Balancer와 동일한 기능 및 혜택을 제공합니까?**
+
+A: 일부 중첩은 있지만 두 가지 유형의 로드 밸런서 사이에는 기능 패리티가 없습니다. Application Load Balancer는 AWS의 향후 애플리케이션 계층 로드 밸런싱 플랫폼의 토대입니다.
+
+**Q: 내 Application Load Balancer의 트래픽만 허용하도록 Amazon EC2 인스턴스를 구성할 수 있습니까?**
+
+A: 예
+
+**Q: Application Load Balancer의 프런트 엔드에 사용할 보안 그룹을 구성할 수 있습니까?**
+
+A: 예
+
+**Q: Classic Load Balancer에 사용하는 기존 API를 Application Load Balancer에 사용할 수 있습니까?**
+
+A: 아니요. Application Load Balancer에는 새로운 API 세트가 필요합니다.
+
+**Q: Application Load Balancer와 Classic Load Balancer를 동시에 관리하려면 어떻게 해야 합니까?** 
+
+A: ELB 콘솔을 사용하면 동일한 인터페이스에서 Application Load Balancer와 Classic Load Balancer를 관리할 수 있습니다. CLI 또는 SDK를 사용하는 경우 Application Load Balancer에 대해서는 다른 ‘서비스’를 사용해야 합니다. 예를 들어 CLI에서는 Classic Load Balancer를 `aws elb describe-load-balancers`로 설명하고, Application Load Balancer는 `aws elbv2 describe-load-balancers`로 설명합니다.
+
+**Q: Classic Load Balancer를 Application Load Balancer로(또는 그 반대로) 전환할 수 있습니까?**
+
+A: 아니요. 한 로드 밸런서 유형을 다른 유형으로 전환할 수 없습니다.
+
+**Q: Classic Load Balancer에서 Application Load Balancer로 마이그레이션할 수 있습니까?**
+
+A: 예 이 [문서](https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/migrate-to-application-load-balancer.html)에 나열된 옵션 중 하나를 사용하여 Classic Load Balancer에서 Application Load Balancer로 마이그레이션할 수 있습니다.
+
+**Q: Application Load Balancer를 4계층 로드 밸런서로 사용할 수 있습니까?**
+
+A: 아니요. 4계층 기능이 필요한 경우 Network Load Balancer를 사용해야 합니다.
+
+**Q: 단일 Application Load Balancer를 사용해 HTTP 및 HTTPS 요청을 처리할 수 있습니까?**
+
+A: 예. 단일 Application Load Balancer에 HTTP 포트 80과 HTTPS 포트 443에 대한 리스너를 추가할 수 있습니다.
+
+**Q: 보안 분석 및 운영 문제 해결 목적으로 내 계정에서 이루어진 애플리케이션 로드 밸런싱 API 호출 기록을 얻을 수 있습니까?**
+
+A: 예 계정에서 이루어진 Application Load Balancer API 호출 기록을 얻으려면 [AWS CloudTrail](https://aws.amazon.com/cloudtrail/)을 사용합니다.
+
+**Q: Application Load Balancer는 HTTPS 종료를 지원합니까?**
+
+A: 예. Application Load Balancer에서 HTTPS 연결을 종료할 수 있습니다. SSL 인증서를 로드 밸런서에 설치해야 합니다. 로드 밸런서는 이 인증서를 사용하여 연결을 종료한 후, 클라이언트의 요청을 복호화하여 대상으로 전송합니다.
+
+**Q: SSL 인증서를 받으려면 어떻게 해야 합니까?**
+
+A: [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)를 사용하여 SSL/TLS 인증서를 프로비저닝할 수 있습니다. 또는 인증서를 요청하고 요청한 인증서에 CA의 서명을 받은 후, AWS Certification Manager 또는 [AWS Identity and Access Management](https://aws.amazon.com/iam/)(IAM) 서비스를 사용하여 인증서를 업로드하여 다른 곳에서 인증서를 확보할 수도 있습니다.
+
+**Q: Application Load Balancer는 AWS Certificate Manager(ACM)와 어떻게 통합됩니까?**
+
+A: Application Load Balancer는 AWS Certificate Management(ACM)와 통합됩니다. ACM과 통합되면서 아주 간단하게 인증서를 로드 밸런서에 연결할 수 있게 되어 전체 SSL 오프로드 프로세스가 매우 간편해졌습니다. SSL/TLS 인증서를 구매, 업로드 및 갱신하는 작업은 시간이 소모되고 복잡한 수동 프로세스입니다. ACM이 Application Load Balancer와 통합되면서 이러한 전체 프로세스가 단축되어, 신뢰할 수 있는 SSL/TLS 인증서를 요청하고 ACM 인증서를 선택하기만 하면 로드 밸런서에 인증서를 프로비저닝할 수 있습니다.
+
+**Q: Application Load Balancer에서 백엔드 서버 인증이 지원됩니까?**
+
+A: 아니요. Application Load Balancer를 사용하는 백엔드에 대해서는 암호화만 지원됩니다.
+
+**Q: 내 Application Load Balancer에 SNI(서버 이름 표시)를 활성화하려면 어떻게 해야 합니까?**
+
+A: 하나 이상의 TLS 인증서를 로드 밸런서의 동일한 보안 리스너에 연결하면 SNI가 자동으로 활성화됩니다. 이와 마찬가지로 하나의 인증서만 보안 리스너에 연결하는 경우 보안 리스너에 대한 SNI 모드가 자동으로 비활성화됩니다.
+
+**Q: 같은 도메인용 인증서 여러 개를 보안 리스너에 연결할 수 있습니까?**
+
+A: 예. 같은 도메인용 인증서 여러 개를 보안 리스너에 연결할 수 있습니다. 예를 들면, 다음 인증서를 연결할 수 있습니다.
+
+ECDSA 및 RSA 인증서
+
+키 크기가 서로 다른(예: 2K, 4K) SSL/TLS 인증서
+
+단일 도메인, 멀티 도메인(SAN) 및 와일드카드 인증서
+
+**Q: Application Load Balancer에서 IPv6를 지원합니까?**
+
+A: 예. Application Load Balancer에서 IPv6를 지원합니다.
+
+**Q: Application Load Balancer에 대한 규칙은 어떻게 설정합니까?**
+
+A: 로드 밸런서에 포함된 각 리스너에 대해 규칙을 구성할 수 있습니다. 규칙에는 조건과 해당 조건이 충족될 경우 수행할 작업이 포함되어 있습니다. 지원되는 조건은 호스트 헤더, 경로, HTTP 헤더, 방법, 쿼리 매개 변수 및 소스 IP CIDR입니다. 지원되는 작업은 리디렉션, 고정 응답, 인증 및 전달입니다. 이를 설정하면 로드 밸런서는 규칙을 사용하여 특정 HTTP 요청을 라우팅할 방법을 결정합니다. 이제 하나의 규칙에서 여러 조건과 작업을 사용할 수 있으며 각 조건에서 일치하는 여러 값을 지정할 수 있습니다.
+
+**Q: Application Load Balancer용 리소스에는 제한이 있습니까?**
+
+A: AWS 계정은 Application Load Balancer에 대해 다음의 [제한](http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html)이 있습니다.
+
+**Q: Q: Load Balancer 뒤쪽의 웹 애플리케이션을 웹 공격으로부터 보호하려면 어떻게 해야 합니까?**
+
+A: Application Load Balancer를 AWS WAF와 통합할 수 있습니다. AWS WAF는 IP 주소, HTTP 헤더 및 사용자 정의 URI 문자열을 기반으로 규칙을 구성함으로써 웹 공격으로부터 웹 애플리케이션을 보호하는 웹 애플리케이션 방화벽입니다. AWS WAF에서는 이러한 규칙을 사용하여 웹 애플리케이션에 대한 웹 요청을 차단, 허용 또는 모니터링(계수)할 수 있습니다. 자세한 내용은 AWS [WAF 개발자 안내](http://docs.aws.amazon.com/console/waf)를 참조하십시오.
+
+**Q: 원하는 임의 IP 주소로 로드 밸런싱을 할 수 있습니까?**
+
+A: 로드 밸런서의 VPC 내에 있는 대상에는 로드 밸런서의 VPC CIDR의 모든 IP 주소를 사용할 수 있고, 로드 밸런서의 VPC 외부에 위치한(예를 들어 AWS Direct Connect 또는 VPN 연결을 통해 액세스할 수 있는 피어링된 VPC, EC2-Classic 및 온프레미스 위치) 대상에는 RFC 1918 범위(10.0.0.0/8, 172.16.0.0/12 및 192.168.0.0/16) 또는 RFC 6598 범위(100.64.0.0/10)의 모든 IP 주소를 사용할 수 있습니다.
+
+**Q: VPC와 온프레미스 위치에 배포된 애플리케이션을 로드 밸런싱하려면 어떻게 해야 합니까?**
+
+A: 하이브리드 로드 밸런싱을 실현할 수 있는 다양한 방법이 있습니다. 애플리케이션이 VPC와 온프레미스 위치 간에 배포된 여러 대상에서 실행된다면, 대상의 IP 주소를 사용하여 대상을 같은 대상 그룹에 추가할 수 있습니다. 애플리케이션에 영향을 주지 않고 AWS로 마이그레이션하기 위해서는 점진적으로 VPC 대상을 대상 그룹에 추가하고 대상 그룹에서 온프레미스 대상을 제거합니다. 예를 들어 한 애플리케이션의 대상은 VPC에 있고 다른 애플리케이션의 대상은 온프레미스 위치에 있는 서로 다른 애플리케이션을 보유한 경우, VPC 대상을 한 대상 그룹에 넣고 온프레미스 대상을 또 다른 대상 그룹에 넣은 후 콘텐츠 기반 라우팅을 사용하여 트래픽을 각 대상 그룹으로 라우팅할 수 있습니다. 또한, VPC와 온프레미스 대상에 별개의 로드 밸런서를 사용하고 DNS 가중치를 사용하여 VPC와 온프레미스 대상 간에 가중치 기반 로드 밸런싱을 실현할 수 있습니다.
+
+**Q: EC2-Classic 인스턴스로 로드 밸런싱하려면 어떻게 해야 합니까?**
+
+A: 인스턴스 ID를 대상으로 등록하는 경우에는 EC2-Classic 인스턴스로 로드 밸런싱할 수 없습니다. 하지만 ClassicLink를 사용하여 이러한 EC2-Classic 인스턴스를 로드 밸런서의 VPC에 연결하고 해당 EC2-Classic 인스턴스의 프라이빗 IP를 사용하면, EC2-Classic 인스턴스로 로드 밸런싱할 수 있습니다. 현재 Classic Load Balancer를 통해 EC2-Classic 인스턴스를 사용하고 있는 경우, 손쉽게 Application Load Balancer로 마이그레이션할 수 있습니다.
+
+**Q: Application Load Balancer에서 교차 영역 로드 밸런싱을 활성화하려면 어떻게 해야 합니까?**
+
+A: Application Load Balancer에는 기본적으로 교차 영역 로드 밸런싱이 활성화되어 있습니다.
+
+**Q: 사용자를 인증할 때 언제 Application Load Balancer를 Amazon Cognito와 통합하여 사용해야 하고, 언제 Application Load Balancer의 OpenID Connect(IODC) 자격 증명 공급자(IdP)에 대한 기본 지원 기능을 사용해야 합니까?**
+
+A: 다음 경우에 Amazon Cognito를 사용해 인증해야 합니다.
+
+- 사용자에게 소셜 네트워크 자격 증명(Google, Facebook 및 Amazon), 엔터프라이즈 자격 증명(SAML) 또는 Amazon Cognito의 사용자 풀에서 제공하는 자체 사용자 디렉터리를 통해 인증할 수 있는 유연성을 제공하려는 경우.
+- OpenID Connect를 비롯하여 여러 자격 증명 공급자를 관리하고 있으며 Amazon Cognito를 사용하여 여러 자격 증명 공급자를 연동하도록 Application Load Balancer(ALB)에 단일 인증 규칙을 생성하려는 경우.
+- 단일 중앙 위치에서 하나 이상의 소셜 또는 OpenID Connect 자격 증명 공급자로 사용자 프로필을 적극적으로 관리해야 하는 경우. 예를 들어 사용자를 그룹으로 묶고, 사용자 상태를 표시하고 유료 사용자의 액세스를 제어하도록 사용자 지정 속성을 추가할 수 있습니다.
+
+또는 사용자 지정 IdP 솔루션을 개발하였고 OpenID Connect와 호환되는 단일 자격 증명 공급자를 통해 인증하려는 경우, Application Load Balancer의 기본 OIDC 솔루션을 사용하는 것이 좋습니다.
+
+**Q: Application Load Balancer가 지원하는 리디렉션 유형은 무엇입니까?**
+
+A: 다음과 같은 3가지 유형의 리디렉션이 지원됩니다.
+
+|   리디렉션 유형   |                             예시                             |
+| :---------------: | :----------------------------------------------------------: |
+|  HTTP에서 HTTP로  |               http://hostA에서 http://hostB로                |
+| HTTP에서 HTTPS로  | http://hostA에서 https://hostB로 https://hostA:portA/pathA에서 https://hostB:portB/pathB로 |
+| HTTPS에서 HTTPS로 |              https://hostA에서 https://hostB로               |
+
+**Q: ALB는 정적 응답 동작의 메시지 본문에 대해 어떤 콘텐츠 유형을 지원합니까?**
+
+A: text/plain, text/css, text/html, application/javascript, application/json과 같은 콘텐츠 유형이 지원됩니다.
+
+**Q: Application Load Balancer를 통한 Lambda 호출은 어떻게 작동합니까?**
+
+A: 로드 밸런서에서 수신되는 HTTP(S) 요청은 콘텐츠 기반 라우팅 규칙에 따라 처리됩니다. 요청 콘텐츠가 Lambda 함수가 대상인 대상 그룹에 해당 콘텐츠를 전달하는 작업을 포함하는 규칙에 일치하는 경우 해당 Lambda 함수가 호출됩니다. 요청 콘텐츠(헤더 및 본문 포함)는 Lambda 함수에 JSON 형식으로 전달됩니다. Lambda 함수의 응답은 JSON 형식이어야 합니다. Lambda 함수의 응답은 HTTP 응답으로 변환되어 클라이언트에 전송됩니다. 로드 밸런서는 AWS Lambda Invoke API를 사용하여 Lambda 함수를 호출합니다. 이 로드 밸런서를 사용하려면 Elastic Load Balancing 서비스에 Lambda 함수에 대한 호출 권한을 제공해야 합니다.
+
+**Q: Application Load Balancer를 통한 Lambda 호출은 HTTP 및 HTTPS 프로토콜을 통한 요청을 모두 지원합니까?**
+
+A: 예 Application Load Balancer는 HTTP 및 HTTPS 프로토콜을 통한 요청에 대한 Lambda 호출을 지원합니다.
+
+**Q: Application Load Balancer에서 Lambda 함수를 대상으로 사용할 수 있는 AWS 리전은 무엇입니까?**
+
+A: 미국 동부(버지니아 북부), 미국 동부(오하이오), 미국 서부(캘리포니아 북부), 미국 서부(오레곤), 아시아 태평양(뭄바이), 아시아 태평양(서울), 아시아 태평양(싱가포르), 아시아 태평양(시드니), 아시아 태평양(도쿄), 캐나다(중부), 유럽(프랑크푸르트), 유럽(아일랜드), 유럽(런던), 유럽(파리), 남아메리카(상파울루) 및 GovCloud(미국 서부) AWS 리전의 Application Load Balancer에서 Lambda를 대상으로 사용할 수 있습니다.
+
+**Q: 로컬 영역에서 Application Load Balancer를 사용할 수 있습니까?**
+
+A: 예, Application Load Balancer를 로스앤젤레스의 로컬 영역에서 사용할 수 있습니다. Application Load Balancer는 로스앤젤레스 로컬 영역 내에서 단일 서브넷에서 작동하며 수동 개입 없이 다양한 수준의 애플리케이션 로드 조건을 만족하도록 자동 확장합니다.
+
+Application Load Balancer 요금 FAQ
+
+**Q: Application Load Balancer는 어떻게 과금됩니까?**
+
+A: Application Load Balancer가 실행된 시간 또는 부분 시간 그리고 시간당 사용된 로드 밸런서 용량 단위(LCU)에 대해 요금이 부과됩니다.
+
+**Q: 로드 밸런서 용량 단위(LCU)란 무엇입니까?**
+
+A: LCU는 Application Load Balancer 요금을 결정하기 위한 새로운 측정치입니다. LCU는 Application Load Balancer가 트래픽을 처리하는 차원(새 연결, 활성 연결 및 대역폭) 중 하나에서 최대로 소비된 리소스를 정의합니다.
+
+**Q: Classic Load Balancer는 LCU를 기준으로 과금됩니까?**
+
+A: 아니요. Classic Load Balancer는 계속해서 대역폭 및 사용 시간을 기준으로 요금이 부과됩니다.
+
+**Q: Application Load Balancer가 사용 중인 LCU는 어떻게 확인합니까 ?**
+
+A: CloudWatch를 통해 LCU에 기여하는 네 차원 모두의 사용량을 확인합니다.
+
+**Q: 모든 차원이 LCU 기준으로 과금됩니까?**
+
+A: 아니요. 시간당 LCU는 LCU를 구성하는 4개의 차원 중에서 소비된 최대 리소스를 기준으로 결정됩니다.
+
+**Q: 부분 LCU도 과금됩니까?**
+
+A: 예
+
+**Q: 새 AWS 계정에는 Application Load Balancer 프리 티어가 제공됩니까?**
+
+A: 예 새 AWS 계정에는 Application Load Balancer 프리 티어로 750시간 및 15 LCU가 제공됩니다. 이러한 프리 티어 혜택은 AWS 신규 고객에게만 제공되며 AWS 가입일로부터 12개월 동안 유효합니다.
+
+**Q: 프리 티어로 Application Load Balancer와 Classic Load Balancer를 동시에 사용할 수 있습니까?**
+
+A: 예 Classic Load Balancer 및 Application Load Balancer 모두 15GB 및 15 LCU를 각각 사용할 수 있습니다. 로드 밸런서 사용 시간 750시간은 Classic Load Balancer와 Application Load Balancer가 합산됩니다.
+
+**Q: 규칙 평가란 무엇입니까?**
+
+A: 규칙 평가는 처리된 규칙 수와 한 시간 동안의 평균 요청 속도의 곱으로 정의됩니다.
+
+**Q: 인증서 유형 및 키 크기가 서로 다를 경우 LCU는 어떻게 청구됩니까?**
+
+A: 인증서 키 크기는 청구를 위한 LCU 계산에서 초당 새로 연결된 수에만 영향을 미칩니다. 아래 표에는 RSA 및 ECDSA 인증서의 서로 다른 키 크기에 대한 해당 차원의 값이 나열되어 있습니다.
+
+ 
+
+|   RSA 인증서   |               |               |               |             |
+| :------------: | :-----------: | :-----------: | :-----------: | :---------: |
+|  **키 크기**   | **<=2K 이하** | **<=4K 이하** | **<=8K 이하** | **8K 초과** |
+| 새로운 연결/초 |      25       |       5       |       1       |    0.25     |
+
+| **ECDSA 인증서** |                |                |                |              |
+| :--------------: | :------------: | :------------: | :------------: | :----------: |
+|   **키 크기**    | **<=256 이하** | **<=384 이하** | **<=521 이하** | **521 초과** |
+|  새로운 연결/초  |       25       |       5        |       1        |     0.25     |
+
+**Q: Application Load Balancer에서 교차 영역 로드 밸런싱을 위한 리전 AWS 데이터 전송에 요금이 부과됩니까?**
+
+A: 아니요. 교차 영역 로드 밸런싱은 Application Load Balancer에서 항상 켜져 있으므로 이 유형의 리전 데이터 전송에 대해 요금이 부과되지 않습니다.
+
+**Q: Application Load Balancer에서 사용자 인증은 별도로 요금이 부과됩니까?**
+
+A: 아니요. Application Load Balancer에서 인증 기능을 활성화하는 데 따른 별도 비용은 없습니다. Application Load Balancer를 Amazon Cognito와 함께 사용하는 경우 Amazon Cognito 요금이 적용됩니다.
+
+**Q: Lambda를 대상으로 사용하는 Application Load Balancer에 어떻게 요금을 부과합니까?**
+
+A: 일반적으로 Application Load Balancer가 실행된 시간 또는 부분 시간 그리고 시간당 사용된 로드 밸런서 용량 단위(LCU)에 대해 요금이 부과됩니다. Lambda 대상의 경우 각 LCU는 시간당 0.4GB의 처리된 바이트, 초당 25개의 새로운 연결, 분당 3,000개의 활성 연결, 초당 1,000개의 규칙 평가를 제공합니다. 처리된 바이트 차원의 경우 각 LCU는 Lambda 대상에 시간당 0.4GB를 제공하고 EC2 인스턴스, 컨테이너, IP 주소를 비롯한 모든 다른 대상에는 시간당 1GB를 제공합니다. 일반 AWS Lambda 요금이 Application Load Balancer에 의한 Lambda 요금에 적용됩니다.
+
+**Q: Lambda 대상에서 처리된 바이트와 다른 대상(EC2, 컨테이너 및 온프레미스 서버)에서 처리된 바이트를 어떻게 알 수 있나요?**
+
+A: Applications Load Balancers는 두 가지 새로운 CloudWatch 지표를 방출합니다. LambdaTargetProcessedBytes 지표는 Lambda 대상에서 처리된 바이트를 나타내고 StandardProcessedBytes 지표는 모든 다른 대상 유형에서 처리된 바이트를 나타냅니다.
+
+## Network Load Balancer
+
+**Q: 내 Network Load Balancer 리스너에 대해 TCP 또는 UDP(4계층)를 생성할 수 있습니까?**
+
+A: 예. Network Load Balancer는 TCP, UDP 및 TCP+UDP(4계층) 리스너와 TLS 리스너를 모두 지원합니다.
+
+**Q: Network Load Balancer에서 사용 가능한 주요 기능은 무엇입니까?**
+
+A: Network Load Balancer는 TCP 및 UDP(4계층) 로드 밸런싱을 제공합니다. Network Load Balancer는 초당 수백만 개의 요청과 갑작스럽고 변동성이 높은 트래픽 패턴을 처리하도록 설계되었으며 지연 시간이 매우 짧습니다. 또한 Network Load Balancer는 TLS 종료를 지원하고 클라이언트의 소스 IP를 유지하며 안정적인 IP 지원과 영역 격리 기능을 제공합니다. WebSocket 유형 애플리케이션에 매우 유용한 장기간 연결도 지원합니다.
+
+**Q: Network Load Balancer는 TCP 및 UDP 프로토콜 트래픽을 모두 동일한 포트에서 처리할 수 있습니까?**
+
+A: 예. 이렇게 하려면 TCP+UDP 리스너를 사용하면 됩니다. 예를 들어 TCP와 UDP를 모두 사용하는 DNS 서비스의 경우 포트 53에서 TCP+UDP 리스너를 생성할 수 있으며, 이 경우 로드 밸런서는 해당 포트에서 UDP 요청과 TCP 요청 모두에 대한 트래픽을 처리하게 됩니다. 이때 TCP+UDP 리스너를 TCP+UDP 대상 그룹과 연결해야 합니다.
+
+**Q: Classic Load Balancer의 TCP 리스너와 비교하여 Network Load Balancer는 어떻게 다릅니까?**
+
+A: Network Load Balancer는 Classic Load Balancer에서는 유지하지 않는 클라이언트의 소스 IP를 유지합니다. 고객은 Classic Load Balancer에서 프록시 프로토콜을 사용하여 소스 IP를 얻을 수 있습니다. Network Load Balancer는 로드 밸런서에 가용 영역당 고정 IP를 자동으로 제공하며 로드 밸런서에 가용 영역당 탄력적 IP도 할당할 수 있습니다. 이는 Classic Load Balancer에서는 지원되지 않습니다.
+
+**Q: Classic Load Balancer에서 Network Load Balancer로 마이그레이션할 수 있습니까?**
+
+A: 예 이 문서에 나열된 옵션 중 하나를 사용하여 Classic Load Balancer에서 Network Load Balancer로 마이그레이션할 수 있습니다.
+
+**Q: Network Load Balancer용 리소스에는 제한이 있습니까?**
+
+A: 예. 자세한 내용은 Network Load Balancer 제한 설명서를 참조하십시오.
+
+**Q: AWS Management Console을 사용하여 내 Network Load Balancer를 설정할 수 있습니까?**
+
+A: 예. AWS Management Console, AWS CLI 또는 API를 사용하여 Network Load Balancer를 설정할 수 있습니다.
+
+**Q: 내 Network Load Balancer에 기존 Classic Load Balancer의 API를 사용할 수 있습니까?**
+
+A: 아니요. Classic Load Balancer를 생성하려면 2012-06-01 API를 사용합니다. Network Load Balancer 또는 Application Load Balancer를 생성하려면 2015-12-01 API를 사용합니다.
+
+**Q: 단일 가용 영역에서 내 Network Load Balancer를 생성할 수 있습니까?**
+
+A: 예. 로드 밸런서 생성 시 단일 서브넷을 제공하면 단일 가용 영역에서 내 Network Load Balancer를 생성할 수 있습니다.
+
+**Q: Network Load Balancer는 DNS 리전 및 영역 장애 조치를 지원합니까?**
+
+A: 예. Amazon Route 53 상태 확인 및 DNS 장애 조치 기능을 사용하면 Network Load Balancer 뒤에서 실행되는 애플리케이션의 가용성을 높일 수 있습니다. Route 53 DNS 장애 조치를 사용하면 여러 AWS 가용 영역에서 애플리케이션을 실행할 수 있으며 장애 조치를 위한 대체 로드 밸런서를 여러 리전에 지정할 수도 있습니다. 여러 AZ에 대해 Network Load Balancer를 구성한 경우 해당 가용 영역에 대한 로드 밸런서에 등록된 정상적인 EC2 인스턴스가 없거나 지정된 영역에 있는 로드 밸런서 노드가 정상이 아니면 R-53이 다른 정상 가용 영역에 있는 로드 밸런서 노드를 대체할 수 없습니다.
+
+**Q: ELB-제공 IP와 탄력적 IP가 혼합되었거나 프라이빗 IP가 할당된 Network Load Balancer를 사용할 수 있습니까?**
+
+A: 아니요. Network Load Balancer의 주소는 사용자 또는 ELB가 완벽하게 제어해야 합니다. 이렇게 해야만 Network Load Balancer에서 탄력적 IP를 사용할 때 클라이언트가 알고 있는 모든 주소가 변경되지 않습니다.
+
+**Q: 각 서브넷에서 내 Network Load Balancer에 하나 이상의 EIP를 할당할 수 있습니까?**
+
+A: 아니요. Network Load Balancer가 있는 연결된 각 서브넷의 경우 Network Load Balancer는 단일 공용/인터넷 IP 주소만 지원할 수 있습니다.
+
+**Q: Network Load Balancer를 제거/삭제할 경우 연결되어 있던 탄력적 IP 주소는 어떻게 됩니까?**
+
+A: 로드 밸런서에 연결되어 있던 탄력적 IP 주소는 할당된 풀로 반환되어 나중에 사용할 수 있습니다.
+
+**Q: Network Load Balancer는 내부 로드 밸런서를 지원합니까?**
+
+A: Network Load Balancer는 Application Load Balancer 및 Classic Load Balancer에서 가능했던 것처럼 인터넷 로드 밸런서 또는 내부 로드 밸런서로 설정할 수 있습니다.
+
+**Q: 내부 Network Load balancer는 각 서브넷에서 하나 이상의 프라이빗 IP를 지원합니까?**
+
+A: 아니요. 로드 밸런서가 있는 연결된 각 서브넷의 경우 Network Load Balancer는 단일 프라이빗 IP만 지원할 수 있습니다.
+
+**Q: 내 Network Load Balancer에서 웹 소켓을 설정할 수 있습니까?**
+
+A: 예. 웹 소켓 프로토콜을 구현하는 대상으로 트래픽을 라우팅하는 TCP 리스너를 구성합니다(https://tools.ietf.org/html/rfc6455). 웹 소켓은 7계층 프로토콜이고 Network Load Balancer는 4계층에서 운영되기 때문에 Network Load Balancer에서 웹 소켓이나 다른 더 높은 수준의 프로토콜을 위한 특별한 처리 과정은 존재하지 않습니다.
+
+**Q: 원하는 임의 IP 주소로 로드 밸런싱을 할 수 있습니까?**
+
+A: 예. 로드 밸런서의 VPC 내에 있는 대상에는 로드 밸런서의 VPC CIDR의 모든 IP 주소를 사용할 수 있고, 로드 밸런서의 VPC 외부에 위치한(예를 들어 AWS Direct Connect를 통해 액세스할 수 있는 EC2-Classic 및 온프레미스 위치) 대상에는 RFC 1918 범위(10.0.0.0/8, 172.16.0.0/12 및 192.168.0.0/16) 또는 RFC 6598 범위(100.64.0.0/10)의 모든 IP 주소를 사용할 수 있습니다. IP 주소 대상 유형에 대한 로드 밸런싱은 TCP 리스너에 대해서만 지원되며 UDP 리스너의 경우에는 현재 지원되지 않습니다.
+
+**Q: Network Load Balancer를 사용하여 PrivateLink를 설정할 수 있습니까?**
+
+A: 예. Network Load Balancer와 TCP 및 TLS 리스너를 함께 사용하여 PrivateLink를 설정할 수 있습니다. Network Load Balancer에서 UDP 리스너를 사용하여 PrivateLink를 설정할 수는 없습니다.
+
+**Q: UDP 흐름이란 무엇입니까?**
+
+A: UDP 연결이 없는 동안 로드 밸런서는 5튜플 해시를 기반으로 UDP 흐름 상태를 유지하여 동일한 컨텍스트에서 전송된 패킷이 동일한 대상에 일관되게 전달되도록 합니다. 이 흐름은 유휴 제한 시간에 도달할 때까지 트래픽 흐름이 이어지는 동안 활성 상태로 간주됩니다. 제한 시간 임계값에 도달하면 로드 밸런서는 선호도를 더 이상 인식하지 못하게 되며, 수신되는 UDP 패킷은 새 흐름으로 간주되어 새 대상으로 로드 밸런싱됩니다. 
+
+**Q: Network Load Balancer에서 지원되는 유휴 제한 시간은 어떻게 됩니까?**
+
+A: TCP 연결에 대한 Network Load Balancer 유휴 제한 시간은 350초입니다. UDP 흐름에 대한 유휴 제한 시간은 120초입니다.
+
+**Q: 인스턴스 ID가 아니라 IP 주소를 사용하여 로드 밸런서 뒤에 있는 컨테이너를 대상으로 하면 어떤 이점이 있습니까?**
+
+A: 인스턴스상의 각 컨테이너는 이제 자체 보안 그룹을 가질 수 있고 다른 컨테이너와 보안 규칙을 공유할 필요가 없습니다. 보안 그룹을 ENI에 연결할 수 있고 인스턴스의 각 ENI는 서로 다른 보안 그룹을 가질 수 있습니다. 컨테이너를 특정 ENI의 IP 주소에 매핑하여 컨테이너별로 보안 그룹을 연결할 수 있습니다. IP 주소를 사용해 로드 밸런싱하면 한 인스턴스에서 실행되는 여러 컨테이너가 같은 포트(예를 들어 포트 80)를 사용할 수 있습니다. 여러 컨테이너에서 같은 포트를 사용할 수 있는 기능 덕분에 한 인스턴스의 컨테이너들이 임의 포트가 아니라 잘 알려진 포트를 통해 서로 통신할 수 있습니다.
+
+**Q: VPC와 온프레미스 위치에 배포된 애플리케이션을 로드 밸런싱하려면 어떻게 해야 합니까?**
+
+A: 하이브리드 로드 밸런싱을 실현할 수 있는 다양한 방법이 있습니다. 애플리케이션이 VPC와 온프레미스 위치 간에 배포된 여러 대상에서 실행된다면, 대상의 IP 주소를 사용하여 대상을 같은 대상 그룹에 추가할 수 있습니다. 애플리케이션에 영향을 주지 않고 AWS로 마이그레이션하기 위해서는 점진적으로 VPC 대상을 대상 그룹에 추가하고 대상 그룹에서 온프레미스 대상을 제거합니다. 또한, VPC와 온프레미스 대상에 별개의 로드 밸런서를 사용하고 DNS 가중치를 사용하여 VPC와 온프레미스 대상 간에 가중치 기반 로드 밸런싱을 실현할 수 있습니다.
+
+**Q: EC2-Classic 인스턴스로 로드 밸런싱하려면 어떻게 해야 합니까?**
+
+A: 인스턴스 ID를 대상으로 등록하는 경우에는 EC2-Classic 인스턴스로 로드 밸런싱할 수 없습니다. 하지만 ClassicLink를 사용하여 이러한 EC2-Classic 인스턴스를 로드 밸런서의 VPC에 연결하고 해당 EC2-Classic 인스턴스의 프라이빗 IP를 사용하면, EC2-Classic 인스턴스로 로드 밸런싱할 수 있습니다. 현재 Classic Load Balancer를 통해 EC2-Classic 인스턴스를 사용하고 있는 경우, 손쉽게 Network Load Balancer로 마이그레이션할 수 있습니다.
+
+**Q: Network Load Balancer에서 교차 영역 로드 밸런싱을 활성화하려면 어떻게 해야 합니까?**
+
+A: Network Load Balancer를 생성한 후 교차 영역 로드 밸런싱을 활성화할 수 있습니다. 로드 밸런싱 섹션을 편집한 다음 교차 영역 로드 밸런싱 지원 확인란을 선택하면 됩니다.
+
+**Q: Network Load Balancer에서 교차 영역 로드 밸런싱을 활성화하면 리전 AWS 데이터 전송에 요금이 부과됩니까?**
+
+A: 예. 교차 영역 로드 밸런싱이 활성화되면 가용 영역 간 리전 데이터 전송에 요금이 부과됩니다. Amazon EC2 온디맨드 요금 페이지의 데이터 전송 섹션에서 요금을 확인하십시오.
+
+**Q: 교차 영역 로드 밸런싱이 Network Load Balancer 제한에 영향을 미칩니까?**
+
+A: 예 현재 Network Load Balancer는 가용 영역당 200개 대상을 지원합니다. 예를 들어 두 개의 가용 영역을 사용한다면 Network Load Balancer에 최대 400개의 대상을 등록할 수 있습니다. 교차 영역 밸런싱이 켜져 있으면 최대 대상 수가 가용 영역당 200개에서 로드 밸런서당 200개로 감소합니다. 그러므로 위 예에서 교차 영역 로드 밸런싱이 켜져 있으면 로드 밸런서가 두 개의 가용 영역에 위치하더라도 로드 밸런서에 할 수 있는 대상은 200개로 제한됩니다.
+
+**Q: Network Load Balancer는 TLS 종료를 지원합니까?**
+
+A: 예. Network Load Balancer에서 TLS 연결을 종료할 수 있습니다. SSL 인증서를 로드 밸런서에 설치해야 합니다. 로드 밸런서는 이 인증서를 사용하여 연결을 종료한 후, 클라이언트의 요청을 복호화하여 대상으로 전송합니다.
+
+**Q: Network Load Balancer에서 TLS를 종료할 때 원본 IP가 보존됩니까?**
+
+A: 원본 IP는 Network Load Balancer에서 TLS가 종료되더라도 계속 보존됩니까?
+
+**Q: SSL 인증서를 받으려면 어떻게 해야 합니까?**
+
+A: [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)를 사용하여 SSL/TLS 인증서를 프로비저닝할 수 있습니다. 또는 인증서를 요청하고 요청한 인증서에 CA의 서명을 받은 후, AWS Certification Manager(ACM) 또는 [AWS Identity and Access Management](https://aws.amazon.com/iam/)(IAM) 서비스를 사용해 인증서를 업로드하여 다른 소스에서 인증서를 확보할 수도 있습니다.
+
+**Q: Network Load Balancer에 SNI(서버 이름 표시)를 활성화하려면 어떻게 해야 합니까?**
+
+A: 하나 이상의 TLS 인증서를 로드 밸런서의 동일한 보안 리스너에 연결하면 SNI가 자동으로 활성화됩니다. 이와 마찬가지로 하나의 인증서만 보안 리스너에 연결하는 경우 보안 리스너에 대한 SNI 모드가 자동으로 비활성화됩니다.
+
+**Q: Network Load Balancer는 AWS Certificate Manager(ACM) 또는 Identity Access Manager(IAM)와 어떻게 통합됩니까?**
+
+A: Network Load Balancer는 AWS Certificate Management(ACM)와 통합됩니다. ACM과 통합되면서 아주 간단하게 인증서를 로드 밸런서에 연결할 수 있게 되어 전체 SSL 오프로드 프로세스가 매우 간편해졌습니다. SSL/TLS 인증서를 구매, 업로드 및 갱신하는 작업은 시간이 소모되고 복잡한 수동 프로세스입니다. ACM이 Network Load Balancer와 통합되면서 이러한 전체 프로세스가 단축되어, 신뢰할 수 있는 SSL/TLS 인증서를 요청하고 ACM 인증서를 선택하기만 하면 로드 밸런서에 인증서를 프로비저닝할 수 있습니다. Network Load Balancer를 생성한 후에는 TLS 리스너를 구성할 수 있으며 ACM 또는 Identity Access Manager(IAM)에서 인증서를 선택하는 옵션이 제공됩니다. 이 같은 기능은 Application Load Balancer 또는 Classic Load Balancer의 기능과 유사합니다.
+
+**Q: Network Load Balancer에서 백엔드 서버 인증이 지원됩니까?**
+
+A: 아니요. Network Load Balancer를 사용하는 백엔드에 대해서는 암호화만 지원됩니다.
+
+**Q: Network Load Balancer에서는 어떤 유형의 인증서가 지원됩니까?**
+
+A: Network Load Balancer는 키 크기가 2K인 RSA 인증서만 지원합니다. 2K보다 큰 RSA 인증서 키 크기나 ECDSA 인증서는 현재 Network Load Balancer에서 지원되지 않습니다.
+
+**Q: Network Load Balancer의 TLS 종료는 어느 AWS 리전에서 지원됩니까?**
+
+A: 미국 동부(버지니아 북부), 미국 동부(오하이오), 미국 서부(캘리포니아 북부), 미국 서부(오레곤), 아시아 태평양(뭄바이), 아시아 태평양(서울), 아시아 태평양(싱가포르), 아시아 태평양(시드니), 아시아 태평양(도쿄), 캐나다(중부), 유럽(프랑크푸르트), 유럽(아일랜드), 유럽(런던), 유럽(파리), 남아메리카(상파울루) 및 GovCloud(미국 서부) AWS 리전의 Network Load Balancer에서 TLS 종료를 사용할 수 있습니다.
+
+Network Load Balancer 요금 FAQ
+
+**Q: Network Load Balancer는 어떻게 과금됩니까?**
+
+A: Network Load Balancer가 실행된 시간 또는 부분 시간 그리고 시간당 Network Load Balancer에서 사용된 로드 밸런서 용량 단위(LCU)에 대해 요금이 부과됩니다.
+
+**Q: 로드 밸런서 용량 단위(LCU)란 무엇입니까?**
+
+A: LCU는 Network Load Balancer 요금을 결정하기 위한 새로운 측정치입니다. LCU는 Network Load Balancer가 트래픽을 처리하는 차원(새 연결/흐름, 활성 연결/흐름 및 대역폭) 중 하나에서 최대로 소비된 리소스를 정의합니다.
+
+**Q: Network Load Balancer에서 TCP 트래픽의 LCU 수치는 얼마입니까?**
+
+A: TCP 트래픽의 LCU 수치는 다음과 같습니다.
+
+- 초당 800개의 새 TCP 연결.
+- 100,000개의 활성 TCP 연결(분당 샘플링됨).
+- EC2 인스턴스, 컨테이너 및 IP 주소를 대상으로 사용하는 경우 시간당 1GB
+
+ 
+
+**Q: Network Load Balancer에서 UDP 트래픽의 LCU 수치는 얼마입니까?**
+
+A: UDP 트래픽의 LCU 수치는 다음과 같습니다.
+
+- 초당 400개의 새 흐름.
+- 50,000개의 활성 UDP 흐름(분당 샘플링됨).
+- EC2 인스턴스, 컨테이너 및 IP 주소를 대상으로 사용하는 경우 시간당 1GB
+
+**Q: Network Load Balancer에서 TLS 트래픽의 LCU 수치는 얼마입니까?**
+
+A: TLS 트래픽의 LCU 수치는 다음과 같습니다.
+
+- 초당 50개의 새 TLS 연결.
+- 3,000개의 활성 TCP 연결(분당 샘플링됨).
+- EC2 인스턴스, 컨테이너 및 IP 주소를 대상으로 사용하는 경우 시간당 1GB
+
+ 
+
+**Q: 모든 차원(처리된 바이트, 새 흐름 및 활성 흐름)에 대해 요금이 부과됩니까?**
+
+ 
+
+A: 아니요. 프토로콜마다 해당 시간에 가장 사용량이 많은 차원에 대해서만 요금이 부과됩니다.
+
+**Q: 초당 새 연결/흐름은 초당 요청과 동일합니까?**
+
+A: 아니요. 단일 연결에서 여러 요청을 보낼 수 있습니다.
+
+**Q: Classic Load Balancer는 LCU를 기준으로 과금됩니까?**
+
+A: 아니요. Classic Load Balancer는 계속해서 대역폭 및 시간 요금을 기준으로 요금이 부과됩니다.
+
+**Q: Network Load Balancer가 사용 중인 LCU는 어떻게 확인합니까?**
+
+A: LCU를 구성하는 3개 차원의 사용량은 모두 Amazon CloudWatch를 통해 공개됩니다.
+
+**Q: 모든 차원이 LCU 기준으로 과금됩니까?**
+
+A: 아니요. 시간당 LCU는 LCU를 구성하는 세 차원 중에서 소비된 최대 리소스를 기준으로 결정됩니다.
+
+**Q: 부분 LCU도 과금됩니까?**
+
+A: 예
+
+**Q: 새 AWS 계정에는 Network Load Balancer 프리 티어가 제공됩니까?**
+
+A: 예 새 AWS 계정에는 Network Load Balancer 프리 티어로 750시간 및 15 LCU가 제공됩니다. 이러한 프리 티어 혜택은 AWS 신규 고객에게만 제공되며 AWS 가입일로부터 12개월 동안 유효합니다.
+
+**Q: 프리 티어로 Network Load Balancer, Application Load Balancer 및 Classic Load Balancer를 동시에 사용할 수 있습니까?**
+
+A: 예 Application Load Balancer 및 Network Load Balancer는 각각 15 LCU, 그리고 Classic Load Balancer는 각각 15GB를 사용할 수 있습니다. 로드 밸런서 사용 시간 750시간은 Application Load Balancer, Network Load Balancer 및 Classic Load Balancer 간에 공유됩니다.
+
+## Gateway Load Balancer
+
+### 시작하기
+
+**Q: Gateway Load Balancer는 언제 사용해야 하고, Network Load Balancer 또는 Application Load Balancer는 언제 사용해야 합니까?**
+
+Gateway Load Balancer는 네트워크 트래픽의 대상이 Gateway Load Balancer 자체가 아닌 인라인 가상 어플라이언스를 배포할 때 사용해야 합니다. Gateway Load Balancer는 타사 가상 어플라이언스를 통한 모든 계층 3 트래픽을 투명하게 전달하며, 트래픽의 소스와 대상에서는 이를 알지 못합니다. 이러한 로드 밸런서의 차이점에 대한 자세한 내용은 [기능 비교](https://aws.amazon.com/ko/elasticloadbalancing/features/#Product_comparisons) 페이지를 참조하십시오.
+
+**Q: Gateway Load Balancer를 사용할 수 있는 리전은 어디입니까?**
+
+Gateway Load Balancer는 us-east-1(북부 버지니아), us-west-2(오레곤), eu-west-1(아일랜드), ap-southeast-2(시드니) 및 sa-east-1(상파울루) 리전에서 사용할 수 있습니다.
+
+**Q: Gateway Load Balancer는 리전별로 배포됩니까, 아니면 가용 영역별로 배포됩니까?**
+
+Gateway Load Balancer는 단일 가용 영역 내에서 실행됩니다.
+
+**Q: Gateway Load Balancer는 TLS 종료를 수행합니까?**
+
+Gateway Load Balancer는 TLS 종료를 수행하지 않으며 애플리케이션 상태를 유지하지 않습니다. 이러한 기능은 트래픽의 소스 및 대상인 타사 가상 어플라이언스에서 수행됩니다.
+
+**Q: Gateway Load Balancer는 애플리케이션 상태를 유지합니까?**
+
+Gateway Load Balancer는 애플리케이션 상태를 유지하지 않지만 트래픽 흐름을 5튜플 또는 3튜플을 사용하는 특정 어플라이언스에 고정된 상태로 유지합니다.
+
+**Q: 단일 가용 영역에 있는 하나의 가상 어플라이언스 인스턴스에 장애가 발생할 경우 Gateway Load Balancer가 이를 처리합니까?**
+
+단일 가상 어플라이언스 인스턴스에 장애가 발생하면 Gateway Load Balancer는 라우팅 목록에서 해당 어플라이언스 인스턴스를 제거하고 트래픽을 정상 상태의 다른 어플라이언스 인스턴스로 다시 라우팅합니다.
+
+**Q: 단일 가용 영역에 있는 모든 가상 어플라이언스에 장애가 발생할 경우 Gateway Load Balancer가 이를 처리합니까?**
+
+단일 가용 영역 내의 모든 가상 어플라이언스에 장애가 발생하면 Gateway Load Balancer는 해당 네트워크 트래픽을 삭제합니다. 따라서 가용성을 높이려면 여러 가용 영역에 Gateway Load Balancer를 배포하는 것이 좋습니다. 단일 가용 영역의 모든 어플라이언스에 장애가 발생할 경우에는 스크립트를 사용하여 새 어플라이언스를 추가하거나 트래픽 대상을 다른 가용 영역의 Gateway Load Balancer로 지정할 수 있습니다.
+
+**Q: 여러 Gateway Load Balancer에 같은 어플라이언스를 대상으로 구성할 수 있습니까?**
+
+예. 여러 Gateway Load Balancer에 동일한 가상 어플라이언스를 대상으로 지정할 수 있습니다.
+
+### Gateway Load Balancer 엔드포인트
+
+**Q: Gateway Load Balancer 엔드포인트가 필요한 이유는 무엇입니까?**
+
+가상 어플라이언스는 가능한 한 추가적인 지연 시간이 적어야 유용하게 사용할 수 있으며, 가상 어플라이언스로 송수신되는 트래픽은 안전한 연결을 따라야 합니다. Gateway Load Balancer 엔드포인트는 이러한 요구 사항을 충족하는 데 필요한 안전하고 지연 시간이 짧은 연결을 생성합니다.
+
+**Q: Gateway Load Balancer 엔드포인트는 어떻게 작동합니까?**
+
+Gateway Load Balancer 엔드포인트는 PrivateLink 기술을 사용하는 새로운 유형의 VPC 종단점입니다. 네트워크 트래픽이 소스(인터넷 게이트웨이, VPC 등)에서 Gateway Load Balancer로 이동하거나 반대 방향으로 이동할 때 Gateway Load Balancer 엔드포인트는 둘 사이의 프라이빗 연결을 보장합니다. AWS 네트워크를 거치는 모든 트래픽과 데이터는 인터넷에 노출되지 않으므로 보안과 성능이 모두 향상됩니다.
+
+**Q: Gateway Load Balancer 엔드포인트는 중앙 집중화에 어떤 도움이 됩니까?**
+
+Gateway Load Balancer 엔드포인트를 사용하면 어플라이언스를 다른 AWS 계정 및 VPC에 배치할 수 있습니다. 그러면 어플라이언스를 한곳에 중앙 집중화하여 관리를 간소화하고 운영 오버헤드를 줄일 수 있습니다.
+
+**Q: PrivateLink 인터페이스 엔드포인트와 Gateway Load Balancer 엔드포인트는 어떤 점이 다릅니까?**
+
+웹 애플리케이션을 위해 전송되는 TCP 및 UDP 트래픽을 분산하기 위해 PrivateLink 인터페이스 엔드포인트는 Network Load Balancer(NLB)와 함께 작동합니다. 반면 Gateway Load Balancer 엔드포인트는 Gateway Load Balancer과 함께 사용되어 트래픽의 소스와 대상을 연결합니다. 트래픽이 Gateway Load Balancer 엔드포인트에서 Gateway Load Balancer로 전송될 때는 가상 어플라이언스를 거치게 되고, 다시 대상으로 전송될 때는 안전한 PrivateLink 연결을 거치게 됩니다.
+
+## Classic Load Balancer
+
+**Q: Classic Load Balancer가 지원하는 운영 체제는 무엇입니까?**
+
+A: Classic Load Balancer는 Amazon EC2 서비스가 현재 지원하는 모든 운영 체제에서 Amazon EC2 인스턴스를 지원합니다.
+
+**Q: Classic Load Balancer가 지원하는 프로토콜은 무엇입니까?**
+
+A: Classic Load Balancer는 HTTP, HTTPS(보안 HTTP), SSL(보안 TCP) 및 TCP 프로토콜을 사용하여 애플리케이션의 로드 밸런싱을 지원합니다.
+
+**Q: 어떤 TCP 포트를 로드 밸런싱할 수 있습니까?**
+
+A: 다음 TCP 포트에 대해 로드 밸런싱을 수행할 수 있습니다.
+
+- [EC2-VPC] 1-65535
+- [EC2-Classic] 25, 80, 443, 465, 587, 1024-65535
+
+**Q: Classic Load Balancer는 IPv6 트래픽을 지원합니까?**
+
+A: 예 각 Classic Load Balancer에는 관련 IPv4, IPv6 및 dualstack(IPv4와 IPv6) DNS 이름이 있습니다. VPC에서는 IPv6가 지원되지 않습니다. VPC에서 IPv6를 기본으로 지원하려면 Application Load Balancer를 사용할 수 있습니다.
+
+**Q: Amazon EC2 인스턴스가 Classic Load Balancer의 트래픽만 허용하도록 구성할 수 있습니까?**
+
+A: 예
+
+**Q: Classic Load Balancer의 프런트 엔드에 사용할 보안 그룹을 구성할 수 있습니까?**
+
+A: Amazon Virtual Private Cloud를 사용하는 경우 Classic Load Balancer의 프런트 엔드에 사용할 보안 그룹을 구성할 수 있습니다.
+
+**Q: 단일 Classic Load Balancer를 사용해 HTTP 및 HTTPS 요청을 처리할 수 있습니까?**
+
+A: 예. HTTP 포트 80과 HTTPS 포트 443을 단일 Classic Load Balancer에 매핑할 수 있습니다.
+
+**Q: 로드 밸런싱한 Amazon EC2 인스턴스가 각 Classic Load Balancer에서 트래픽을 허용하려면 얼마나 많은 연결이 필요합니까?**
+
+A: Classic Load Balancer는 로드 밸런싱한 Amazon EC2 인스턴스와의 연결을 구성하기 위해 시도할 수 있는 최대 연결 횟수에 제한을 두지 않습니다. 따라서 동시 HTTP, HTTPS 또는 SSL 요청 수나 Classic Load Balancer가 수신하는 동시 TCP 연결 수에 맞춰 이 수치가 늘어날 수 있습니다.
+
+**Q: 유료 AMI를 사용해 실행한 Amazon EC2 인스턴스를 로드 밸런싱할 수 있습니까?**
+
+A: [AWS Marketplace](https://aws.amazon.com/marketplace)의 유료 AMI를 사용하여 실행된 Amazon EC2 인스턴스는 로드 밸런싱할 수 있습니다. 하지만 [Amazon DevPay](http://aws.amazon.com/devpay/) 사이트의 유료 AMI로 시작된 인스턴스는 Classic Load Balancer가 지원하지 않습니다.
+
+**Q: Amazon Virtual Private Cloud에서 Classic Load Balancer를 사용할 수 있습니까?**
+
+A: 예 Elastic Load Balancing [웹 페이지](https://aws.amazon.com/ko/elasticloadbalancing/)를 참조하십시오.
+
+**Q: 보안 분석 및 운영 문제 해결 목적으로 내 계정에서 이루어진 Classic Load Balancer API 호출 기록을 얻을 수 있습니까?**
+
+A: 예 계정에서 이루어진 Classic Load Balancer API 호출 기록을 수신하려면 AWS Management Console에서 CloudTrail을 활성화하면 됩니다.
+
+**Q: Classic Load Balancer는 SSL 종료를 지원합니까?**
+
+A: 예. Classic Load Balancer에서 SSL을 종료할 수 있습니다. SSL 인증서를 각 로드 밸런서에 설치해야 합니다. 로드 밸런서는 이 인증서를 사용하여 연결을 종료한 후, 클라이언트의 요청을 복호화하여 백엔드 인스턴스로 전송합니다.
+
+**Q: SSL 인증서를 받으려면 어떻게 해야 합니까?**
+
+A: [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)를 사용하여 SSL/TLS 인증서를 프로비저닝할 수 있습니다. 또는 AWS Identity and Access Management(IAM) 서비스를 사용하여 인증서를 요청하고, 요청한 인증서에 CA의 서명을 받은 후, 인증서를 업로드하여 다른 곳에서 인증서를 확보할 수도 있습니다.
+
+**Q: Classic Load Balancer는 AWS Certificate Manager(ACM)와 어떻게 통합됩니까?**
+
+A: Classic Load Balancer는 이제 AWS Certificate Manager(ACM)와 통합됩니다. ACM과 통합되면서 아주 간단하게 인증서를 각 로드 밸런서에 연결할 수 있게 되어 전체 SSL 오프로드 프로세스가 매우 간편해졌습니다. 일반적으로 SSL/TLS 인증서를 구매, 업로드 및 갱신하는 작업은 시간이 소모되고 복잡한 수동 프로세스입니다. ACM이 Classic Load Balancer와 통합되면서 이러한 전체 프로세스가 단축되어, 신뢰할 수 있는 SSL/TLS 인증서를 요청하고 ACM 인증서를 선택하기만 하면 각 로드 밸런서에 인증서를 프로비저닝할 수 있습니다.
+
+**Q: Classic Load Balancer에서 교차 영역 로드 밸런싱을 활성화하려면 어떻게 해야 합니까?**
+
+A: 콘솔, AWS CLI 또는 AWS SDK를 사용하여 교차 영역 로드 밸런싱을 활성화할 수 있습니다. 자세한 내용은 교차 영역 로드 밸런싱 [설명서](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html#enable-cross-zone)를 참조하십시오.
+
+**Q: Classic Load Balancer에서 교차 영역 로드 밸런싱을 활성화하면 리전 AWS 데이터 전송에 요금이 부과됩니까?**
+
+A: 아니요. Classic Load Balancer에 교차 영역 로드 밸런싱을 활성화할 경우 가용 영역 간 리전 데이터 전송에는 요금이 부과되지 않습니다
